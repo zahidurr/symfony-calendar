@@ -1,0 +1,52 @@
+framework:
+  messenger:
+    buses:
+      messenger.bus.default:
+        default_middleware: 'allow_no_handlers'
+
+    transports:
+      product_receive_service:
+        dsn: 'sqs://default/%env(PRODUCT_RECEIVE_QUEUE_NAME)%'
+        serializer: App\Messenger\Serializer
+        options:
+          region: '%env(AWS_REGION)%'
+          queue_name: '%env(PRODUCT_RECEIVE_QUEUE_NAME)%'
+          endpoint: 'https://sqs.%env(AWS_REGION)%.amazonaws.com'
+      crm_receive_service:
+        dsn: 'sqs://default/%env(CRM_RECEIVE_QUEUE_NAME)%'
+        serializer: App\Messenger\Serializer
+        options:
+          region: '%env(AWS_REGION)%'
+          queue_name: '%env(CRM_RECEIVE_QUEUE_NAME)%'
+          endpoint: 'https://sqs.%env(AWS_REGION)%.amazonaws.com'
+
+      product_request_service:
+        dsn: 'app-sqs://default/%env(PRODUCT_REQUEST_QUEUE_NAME)%'
+        serializer: App\Messenger\Serializer
+        options:
+          region: '%env(AWS_REGION)%'
+          queue_name: '%env(PRODUCT_REQUEST_QUEUE_NAME)%'
+          endpoint: 'https://sqs.%env(AWS_REGION)%.amazonaws.com'
+
+      agreement_service:
+        dsn: 'app-sqs://default/%env(AGREEMENT_CHECKOUT_QUEUE_NAME)%'
+        serializer: App\Messenger\Serializer
+        options:
+          region: '%env(AWS_REGION)%'
+          queue_name: '%env(AGREEMENT_CHECKOUT_QUEUE_NAME)%'
+          endpoint: 'https://sqs.%env(AWS_REGION)%.amazonaws.com'
+
+      notification_service:
+        dsn: 'app-sqs://default/%env(MAIL_QUEUE_NAME)%'
+        serializer: App\Messenger\Serializer
+        options:
+          region: '%env(AWS_REGION)%'
+          queue_name: '%env(MAIL_QUEUE_NAME)%'
+          endpoint: 'https://sqs.%env(AWS_REGION)%.amazonaws.com'
+
+    routing:
+      App\Message\Product\RetrieveProductData: product_request_service
+      App\Message\Product\RetrieveVoucherData: product_request_service
+      App\Message\Agreement\SuccessfulPaymentFeedbackToAgreement: agreement_service
+      App\Message\Notification\SendEmail: notification_service
+      App\Message\CRM\EndCustomerUpdateAddressMessage: crm_receive_service

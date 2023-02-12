@@ -1,0 +1,6 @@
+###> symfony/framework-bundle ###
+/.idea
+.idea/
+.DS_Store
+/.php_cs
+/.php_cs.cache

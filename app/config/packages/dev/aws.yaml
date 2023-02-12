@@ -1,0 +1,9 @@
+aws:
+  version: latest
+  region: "%env(AWS_REGION)%"
+  credentials:
+    key: "%env(AWS_KEY)%"
+    secret: "%env(AWS_SECRET)%"
+
+  Kms:
+    endpoint: "http://host.docker.internal:4566"

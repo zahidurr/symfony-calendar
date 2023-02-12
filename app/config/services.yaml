@@ -1,0 +1,52 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+imports:
+  - { resource: filters.yaml }
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    bind:
+      $receiveProductData: '%env(resolve:PRODUCT_RECEIVE_QUEUE_NAME)%'
+      $stripeApiSecretKey: '%env(resolve:STRIPE_API_SECRET_KEY)%'
+      $stripeWebhookEndpointSecret: '%env(resolve:STRIPE_WEBHOOK_ENDPOINT_SECRET)%'
+      $stripeApiVersion: '%env(resolve:STRIPE_API_VERSION)%'
+      $nfeApiKey: '%env(resolve:NFE_API_KEY)%'
+      $nfeCompanyId: '%env(resolve:NFE_COMPANY_ID)%'
+      $nfeWebhookSecret: '%env(resolve:NFE_WEBHOOK_SECRET)%'
+      $appUrl: '%env(resolve:APP_URL)%'
+
+  # make classes in src/ available to be used as services
+  # this creates a service per class whose id is the fully-qualified class name
+  App\:
+    resource: '../src/'
+    exclude:
+      - '../src/DependencyInjection/'
+      - '../src/Entity/'
+      - '../src/Kernel.php'
+      - '../src/Tests/'
+
+  # controllers are imported separately to make sure services can be injected
+  # as action arguments even if you don't extend any base controller class
+  App\Controller\:
+    resource: '../src/Controller/'
+    tags: [ 'controller.service_arguments' ]
+
+  # add more service definitions when explicit configuration is needed
+  # please note that last definitions always *replace* previous ones
+
+  # swagger decorator
+  App\Swagger\SwaggerDecorator:
+    decorates: 'api_platform.swagger.normalizer.documentation'
+    autoconfigure: false
+
+  App\Util\AwsSqsUtil:
+    calls:
+      - [addQueue, ["surveyRequest", "%env(REQUEST_SURVEY_QUEUE_NAME)%"]]

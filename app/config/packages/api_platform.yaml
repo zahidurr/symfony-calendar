@@ -1,0 +1,30 @@
+api_platform:
+    path_segment_name_generator: api_platform.path_segment_name_generator.dash
+
+    eager_loading:
+        fetch_partial: true
+        max_joins: 100
+        force_eager: false
+
+    collection:
+        pagination:
+            client_enabled: true
+            client_items_per_page: true
+            items_per_page_parameter_name: perPage
+
+    mapping:
+        paths:
+            - '%kernel.project_dir%/src/Entity'
+            - '%kernel.project_dir%/config/api_platform'
+
+    formats:
+        json: [ 'application/json' ]
+        html: [ 'text/html' ]
+        jsonld: [ 'application/ld+json' ]
+
+    swagger:
+        versions: [2,3]
+        api_keys:
+            apiKey:
+                name: Authorization
+                type: header

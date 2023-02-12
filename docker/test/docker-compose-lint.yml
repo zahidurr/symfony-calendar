@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+    php-fpm:
+        build:
+            context: ./../../
+            dockerfile: docker/php-fpm/Dockerfile
+            args:
+                SSH_PRIVATE_KEY: ${build_ssh_key}
+            target: test
+        command: "sh -c 'vendor/bin/php-cs-fixer fix src --dry-run --diff'"
+        environment:
+            - APP_ENV=test
+            - FRONTEND_HOST=webserver
+            - TRIAL_SUBSCRIPTION_PERIOD=30 days
+        env_file:
+          - ../../.env

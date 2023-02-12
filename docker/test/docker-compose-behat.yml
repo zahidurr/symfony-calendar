@@ -1,0 +1,39 @@
+version: "3.7"
+services:
+  postgresql:
+    image: postgres:10.6
+    environment:
+      - POSTGRES_PASSWORD=qwerty
+      - POSTGRES_DB=stirling_blue_db
+
+  webserver:
+    build:
+      context: ./../../
+      dockerfile: docker/nginx/Dockerfile
+      target: test
+    environment:
+      - VIRTUAL_HOST=stirling-blue.local
+      - FPM_CONTAINER_NAME=php-fpm
+    links:
+      - php-fpm
+    depends_on:
+      - php-fpm
+
+  php-fpm:
+    build:
+      context: ./../../
+      dockerfile: docker/php-fpm/Dockerfile
+      args:
+        SSH_PRIVATE_KEY: ${build_ssh_key}
+      target: test
+    command: "sh -c 'sleep 4 && cat behat.yml && bin/console doctrine:migrations:migrate -e test --no-debug && bin/console doctrine:schema:validate -e test --no-debug && vendor/bin/behat'"
+    environment:
+      - APP_ENV=test
+      - FRONTEND_HOST=webserver
+    env_file:
+      - ./../../.env
+    links:
+      - postgresql
+    depends_on:
+      - postgresql
+

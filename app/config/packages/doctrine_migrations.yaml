@@ -1,0 +1,15 @@
+doctrine_migrations:
+
+
+    # List of namespace/path pairs to search for migrations, at least one required
+    migrations_paths:
+        'App\Migrations': 'src/Migrations'
+
+    # Possible values: "BY_YEAR", "BY_YEAR_AND_MONTH", false
+    organize_migrations: "BY_YEAR_AND_MONTH"
+
+    # Run all migrations in a transaction.
+    all_or_nothing: true
+
+    # Adds an extra check in the generated migrations to ensure that is executed on the same database type.
+    check_database_platform: true

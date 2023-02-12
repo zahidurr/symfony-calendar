@@ -1,0 +1,11 @@
+services:
+    StirlingBlue\SecurityBundle\Security\JWTTokenAuthenticator:
+        public: true
+        class: App\Tests\Mock\JWTTokenAuthenticator
+        arguments:
+          [ '@StirlingBlue\SecurityBundle\TokenExtractor\AuthorizationHeaderTokenExtractor', '@StirlingBlue\SecurityBundle\Security\KmsSigner' ]
+
+    Symfony\Component\Messenger\MessageBusInterface:
+        public: true
+        class: App\Tests\Mock\MessageBusMock
+        autowire: true

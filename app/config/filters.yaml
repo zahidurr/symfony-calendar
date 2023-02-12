@@ -1,0 +1,21 @@
+services:
+  app.cart.customer_filter:
+    parent: 'api_platform.doctrine.orm.search_filter'
+    arguments: [ { 'customerId': 'exact' } ]
+    tags: [ { name: 'api_platform.filter', id: 'cart.customer_filter' } ]
+    autowire: false
+    autoconfigure: false
+
+  app.cart.organization_filter:
+    parent: 'api_platform.doctrine.orm.search_filter'
+    arguments: [ { 'organizationId': 'exact' } ]
+    tags: [ { name: 'api_platform.filter', id: 'cart.organization_filter' } ]
+    autowire: false
+    autoconfigure: false
+
+  app.cart.created_at_order_filter:
+    parent: 'api_platform.doctrine.orm.order_filter'
+    arguments: [ {'createdAt': ~ } ]
+    tags: [ { name: 'api_platform.filter', id: 'cart.order_created_at_filter' } ]
+    autowire: false
+    autoconfigure: false

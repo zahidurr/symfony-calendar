@@ -1,0 +1,82 @@
+resources:
+  App\Entity\Cart:
+    attributes:
+      normalization_context:
+        groups: [ 'cart:read' ]
+
+    properties:
+      cartLogs:
+        subresource:
+          resourceClass: 'App\Entity\CartLog'
+          collection: true
+
+      paymentLogs:
+        subresource:
+          resourceClass: 'App\Entity\PaymentLog'
+          collection: true
+
+    collectionOperations:
+      post:
+        input: App\Dto\Cart\CartInput
+      get:
+        filters: [ 'cart.customer_filter', 'cart.organization_filter', 'cart.order_created_at_filter' ]
+      agreement_free_period_check:
+        openapi_context:
+          summary: "Check agreement free period status"
+          description: "Check agreement free period status"
+          parameters:
+            - name: 'agreementId'
+              type: 'string'
+              in: 'path'
+              description: 'Agreement identifier'
+              required: true
+          responses:
+            200:
+              description: 'Agreement free period status response'
+              content:
+                application/json:
+                  schema:
+                    type: 'object'
+                    properties:
+                      isPaid: { type: 'boolean' }
+                      paidAt: { type: 'object' }
+        method: 'GET'
+        path: 'carts/agreement/{agreementId}/free_period_status'
+        controller: App\Controller\AgreementFreePeriodCheckController
+
+    itemOperations:
+      get: ~
+      put:
+        input: App\Dto\Cart\CartInput
+      delete: ~
+      apply_voucher:
+        openapi_context:
+          summary: "Apply voucher code."
+          description: "Apply voucher code."
+        method: 'PUT'
+        path: 'carts/{id}/apply-voucher'
+        input: App\Dto\Cart\VoucherInput
+      remove_voucher:
+        openapi_context:
+          summary: "Remove voucher code."
+          description: "Remove voucher code."
+        method: 'PUT'
+        path: 'carts/{id}/remove-voucher'
+        controller: App\Controller\RemoveVoucherController
+        input: false
+      issue_nfe:
+        openapi_context:
+          summary: "issue nfe invoice"
+          description: "issue nfe invoice"
+        method: 'PUT'
+        path: 'carts/{id}/issue_nfe'
+        controller: App\Controller\IssueNfeForCartController
+        input: false
+      sync_nfe:
+        openapi_context:
+          summary: "sync nfe invoice status"
+          description: "sync nfe invoice status"
+        method: 'PUT'
+        path: 'carts/{id}/sync_nfe'
+        controller: App\Controller\SyncNfeForCartController
+        input: false

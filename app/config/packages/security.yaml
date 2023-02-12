@@ -1,0 +1,33 @@
+security:
+  # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+  providers:
+    users_in_memory: { memory: null }
+  firewalls:
+    healthCheck:
+      pattern: ^/api-checkout/health-check$
+      security: false
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+    main:
+      pattern: ^/
+      stateless: true
+      anonymous: true
+      guard:
+        authenticators:
+          - StirlingBlue\SecurityBundle\Security\JWTTokenAuthenticator
+
+      # activate different ways to authenticate
+      # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+      # https://symfony.com/doc/current/security/impersonating_user.html
+      # switch_user: true
+
+  # Easy way to control access for large sections of your site
+  # Note: Only the *first* access control that matches will be used
+  access_control:
+    - { path: ^/api-checkout/docs, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api-checkout/stripe-payments/webhook, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api-checkout/nfe-invoices/webhook, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api-checkout/get-nfe, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api-checkout, roles: IS_AUTHENTICATED_FULLY }

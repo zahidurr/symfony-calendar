@@ -1,0 +1,6 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+app_health_check:
+    path: /api-checkout/health-check
+    controller: App\Controller\HealthCheckController

@@ -1,0 +1,46 @@
+version: "3.7"
+services:
+
+  postgresql:
+    image: postgres:11
+    volumes:
+      - psql:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=qwerty
+      - POSTGRES_DB=db
+    ports:
+      - "5771:5432"
+
+  webserver:
+    build:
+      context: ./
+      dockerfile: ./docker/nginx/Dockerfile
+      target: base
+    environment:
+      - VIRTUAL_HOST=${VIRTUAL_HOST}
+      - FPM_CONTAINER_NAME=php-fpm
+    volumes:
+      - ./app/public:/var/www/symfony/public:rw,cached
+    ports:
+      - "8998:80"
+
+  php-fpm:
+    user: www-data
+    build:
+      context: ./docker/php-fpm
+      dockerfile: Dockerfile
+      target: ${FPM_BUILD_TARGET}
+      args:
+        CLIENT_HOST: ${CLIENT_HOST}
+    working_dir: /var/www/symfony
+    volumes:
+      - ./app:/var/www/symfony:rw,cached
+      - home:/home/www-data:rw,cached
+      - ./docker/php-fpm/php-ini-overrides.ini:/usr/local/etc/php/conf.d/99-php-ini-overrides.ini:rw,cached
+    environment:
+      - XDEBUG_CONFIG=remote_enable=1 remote_host=host.docker.internal remote_port=9003 xdebug.cli_color=1 idekey=PHPSTORM
+      - PHP_IDE_CONFIG=serverName=calender
+
+volumes:
+  psql:
+  home:
