@@ -4,7 +4,7 @@ security:
     users_in_memory: { memory: null }
   firewalls:
     healthCheck:
-      pattern: ^/api-checkout/health-check$
+      pattern: ^/api-calender/health-check$
       security: false
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -26,8 +26,8 @@ security:
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
-    - { path: ^/api-checkout/docs, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/api-checkout/stripe-payments/webhook, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/api-checkout/nfe-invoices/webhook, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/api-checkout/get-nfe, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/api-checkout, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api-calender/docs, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api-calender/stripe-payments/webhook, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api-calender/nfe-invoices/webhook, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api-calender/get-nfe, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api-calender, roles: IS_AUTHENTICATED_FULLY }

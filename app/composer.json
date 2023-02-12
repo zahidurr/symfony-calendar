@@ -75,7 +75,7 @@
   "scripts": {
     "auto-scripts": {
       "cache:clear": "symfony-cmd",
-      "assets:install %PUBLIC_DIR%/api-checkout": "symfony-cmd"
+      "assets:install %PUBLIC_DIR%/api-calender": "symfony-cmd"
     },
     "post-install-cmd": [
       "@auto-scripts"

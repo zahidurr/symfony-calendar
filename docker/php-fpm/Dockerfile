@@ -1,4 +1,4 @@
-FROM public.ecr.aws/p1f0g9j3/lexly-main-base-app/php:8.0-fpm as base
+FROM public.ecr.aws/p1f0g9j3/main-base-app/php:8.0-fpm as base
 
 RUN apt-get update && apt-get install -y lsb-base \
     libzip-dev \
@@ -98,7 +98,7 @@ RUN mkdir -p /var/www/symfony/var
 
 COPY --chown=www-data:www-data ./app/.env .env
 RUN chmod +x bin/console
-RUN mkdir -p public/api-checkout && bin/console assets:install public/api-checkout -e prod --no-debug \
+RUN mkdir -p public/api-calender && bin/console assets:install public/api-calender -e prod --no-debug \
     && rm .env
 
 RUN git clone git@bitbucket.org:agreementbb/service_discovery_scheme.git -b dev service_discovery_scheme

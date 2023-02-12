@@ -1,6 +1,6 @@
 # Parameters
 SHELL         = zsh
-PROJECT       = api_checkout
+PROJECT       = api_calender
 HTTP_PORT     = 8986
 
 # Executables

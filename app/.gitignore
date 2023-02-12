@@ -3,7 +3,7 @@
 /.env.local.php
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
-/public/api-checkout/bundles/
+/public/api-calender/bundles/
 /var/
 /vendor/
 /vendor/*

@@ -18,4 +18,4 @@ framework:
 
     assets:
         base_urls:
-            - '%env(resolve:APP_URL)%/api-checkout'
+            - '%env(resolve:APP_URL)%/api-calender'
